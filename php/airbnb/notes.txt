@@ -1,0 +1,31 @@
+AIRBNB CODING CHALLENGE
+Thomas Tran
+solved 03/06/12 @ 10pm - 03/07/12 @ 1am
+
+APPROACH
+I first considered the brute force approach:
+1. load all the calendar dates in one array
+2. load all the properties in another array.
+3. For each search result, look through EVERY property to see if the property is located close enough to the search query. 
+4. For each property that is located close enough, search through every calendar event to see if there is a special price or if it is unavailable.
+5. Calculate all the prices.
+6. Sort and return top 10.
+
+However, this is pretty inefficient.
+
+Firstly, instead of searching through all of the calendar events, it is better to organize/sort the events as I are parsing through it in order to minimize search time. To this end, I put them all in an associative array by property id. That allows us to look up all the events for a given property in O(1) time.
+
+Secondly, instead of searching through all the properties, I should also organize it in some fashion. Since a big criteria for our searches is location it makes sense to organize by location. I first considered sorting it by latitude and longitude. However, I would then need to do something like a binary search to find a nearby property, and then I can iterate through to find other potential matches. Unfortuantely, this is complicated, prone to errors, and implementing a binary search is not fun. Instead, I decided that since the maximum distance a property can be is one unit latitude and one unit longitude away, to create a 2-d array which represents a geographical grid of the map of property listings. Then, each listing would fit nicely in one of the grid squares (eg. property at [15.1234, 9.645] would get stored in $properties[15][9]). Therefore, when I get a search query, it becomes much easier to find all the nearby listings. In the below grid, if X represents the search location, then X, along with all the O's, would be the grids containing possible listings that are close enough to the search location:
+
+O O O
+O X O
+O O O
+
+Of course, some of the properties might still be too far away. Eg. if our search is [15.9, 9.9] and the listing is located at [14.1, 9.5]. So after I get a list of possible properties, I have to check each one to be sure. The worst case for this is still O(n) if all the properties are close to the search location. However, in the general case, it's decently fast.
+
+Then, once I have list of properties that are close enough to the search query, I then look through all the calendar events for those listings and determing whether or not it's available between when the user wants to check in and when they want to check out. If the listing is available, I maintain a top 10 list and I scan that list to see if the property is cheaper than any of the current top 10 properties. After checking all qualifying properties, I store the top 10 list and move on to the next search.
+
+ANALYSIS
+My solution is significantly more efficient than the standard brute force solution as I have an O(1) lookup for calendar events and I am pretty efficient about looking up close by properties. The lookup of properties benefits greatly by an even distribution of the property locations. In the real world, this is probably not true, but given that the properties are split up into 1x1 latitude/longitude chunks and that is the maximum distance between the search query and an acceptable property is 1, I think this implementation is not that less efficient than the best solution, even for a dense area, as you would have to scan a lot of properties either way. 
+
+My solution is pretty memory intensive. This solution would clearly not scale, since I could only store so much before I blow out the PHP operating memory (defaulted to 128MB, can be changed, but still not limitless). If possible, I would place all the properties in each square as an entry in a key-value type datastore, keyed by the latitude/longitude. Even still, a degree latitude/longitude can cover a really large area and for dense, touristy areas like New York, there are probably still too many listings. However, we can easily tune the size of the grid squares so that instead of 1.0x1.0 degree chunks, we can split them up into 0.1x0.1 degree chunks, which incur a higher number of database reads. But, we can analyze each square one at a time instead of loading all the nearby listings into memory.
