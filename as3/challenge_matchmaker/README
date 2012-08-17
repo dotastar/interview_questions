@@ -1,0 +1,14 @@
+Interview Problem: Dungeon Matchmaker
+
+Problem Statement
+In many MMORPGs, users must form a party before entering a dungeon. However, oftentimes, players don't have enough friends online or do not have friends of the necessary classes to successfully traverse the dungeon. Therefore, many popular MMORPGs have implemented a matchmaking service where players queue themselves for a dungeon and the service will group together users such that:
+
+- all party members fulfill the minimum level requirements
+- the party has players that fulfill all of the class requiremenets (eg. most parties need a healer and a tank)
+- all things being equal, players should have precedence over players that queue after.
+
+Add code to the MatchMaker.enqueue() function to detemine if such a party exists and print out the party members
+
+Definitions
+Player: a player is a user, having three properties: class, name, and level.
+Dungeon: a dungeon has three properties: miniumum level requirement, required classes, and minimum level requirement
