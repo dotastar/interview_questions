@@ -1,0 +1,25 @@
+<project name="usrbincrash" default="jar">
+  <!-- set global properties for this build -->
+  <property name="src" location="."/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="."/>
+
+  <target name="compile">
+    <mkdir dir="${build}"/>
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put everything in ${build} into the .jar file -->
+    <jar jarfile="usrbincrash.jar" basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class" value="usrbincrash.Main"/>
+      </manifest>
+    </jar>
+  </target>
+</project>
+

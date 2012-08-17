@@ -1,0 +1,16 @@
+bool insertInFront( IntElement *head, int data ){    IntElement *newElem = new IntElement;
+    if( !newElem ) return false;
+    newElem->data = data;
+    head = newElem; // Incorrect!
+    return true;
+}
+
+The preceding code is incorrect because it only updates the local copy of the head pointer. The correct version passes in a pointer to the head pointer: 
+
+bool insertInFront( IntElement **head, int data ){
+    IntElement *newElem = new IntElement;
+    if( !newElem ) return false;
+    newElen->data = data;
+    *head = newElem; // Correctly updates head
+    return true;
+}

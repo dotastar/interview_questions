@@ -1,0 +1,41 @@
+Four Quarters "Algorithm"
+
+Key:
+H = Head
+T = Tail
+X = Unknown
+
+1. We create a start state: Choose two diametrically opposed quarters and make them both the same (in this instance, head). We have the following scenario:
+
+											  H
+											X   T
+											  X
+
+2. After spinning the lazy susan, we have two possible configurations:
+
+								  1.  H        2.   X
+	  								X   X         H   H
+								      H             X
+								      
+We now look at the (west,south) coinss, and we see either (T, H), (H, T) or (H, H). If it is (H, H), skip to step 3. Otherwise, for (T,H) and (H,T), change the coin that is showing tails to heads. There are now three coins showing heads and one showing tail (given that the game is not over).
+
+
+n-1: 
+  H
+T   T 
+  H
+  
+n. Now that the orientation of the coins alternate, after the next spin, simply choose any two non-adjacent coin and reverse their orientation. This should cause all coins to either be heads or tails.
+
+
+ h
+x t
+ x
+ 
+ h
+x t
+ h
+
+ h
+x h
+ t
